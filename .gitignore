@@ -1,0 +1,9 @@
+# Vercel
+.vercel
+
+# Logs and system files
+*.log
+.gemini/
+.agents/
+.DS_Store
+Thumbs.db

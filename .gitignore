@@ -1,5 +1,7 @@
 # Vercel
-.vercel
+# Scratch and temporary scrape files
+assets/images/original/
+scratch_*
 
 # Logs and system files
 *.log

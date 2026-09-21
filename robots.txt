@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://charu-techno.vercel.app/sitemap.xml
+Sitemap: https://www.charutechno.com/sitemap.xml

@@ -3,22 +3,29 @@
 /* --- DESIGN SYSTEM & TOKENS --- */
 :root {
     /* Color Palette */
-    --bg-primary: #0b0f19;
-    --bg-secondary: #111827;
-    --bg-tertiary: #1f2937;
+    --bg-primary: #090d16;
+    --bg-secondary: #0f1624;
+    --bg-tertiary: #192337;
     --text-primary: #f9fafb;
     --text-secondary: #d1d5db;
     --text-muted: #9ca3af;
     --accent-gold: #f59e0b;
     --accent-gold-hover: #d97706;
-    --accent-gold-glow: rgba(245, 158, 11, 0.2);
+    --accent-gold-glow: rgba(245, 158, 11, 0.25);
     --border-color: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(245, 158, 11, 0.1);
+    --border-glow: rgba(245, 158, 11, 0.15);
+    
+    /* Industrial Manufacturing Tokens */
+    --industrial-amber: #f59e0b;
+    --industrial-steel: #243046;
+    --industrial-grid: rgba(245, 158, 11, 0.06);
+    --industrial-grid-line: rgba(255, 255, 255, 0.025);
+    --industrial-hazard: repeating-linear-gradient(-45deg, #f59e0b 0, #f59e0b 10px, #111827 10px, #111827 20px);
     
     /* Glassmorphism */
-    --glass-bg: rgba(17, 24, 39, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.06);
-    --glass-shadow: rgba(0, 0, 0, 0.4);
+    --glass-bg: rgba(15, 22, 36, 0.78);
+    --glass-border: rgba(245, 158, 11, 0.12);
+    --glass-shadow: rgba(0, 0, 0, 0.5);
     
     /* Transitions */
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -47,11 +54,23 @@ html {
 
 body {
     background-color: var(--bg-primary);
+    background-image: 
+        /* Technical CAD Crosshair Dot Matrix (every 30px) */
+        radial-gradient(circle at 1.5px 1.5px, rgba(245, 158, 11, 0.22) 1.5px, transparent 0),
+        /* Precision Orthogonal CAD Blueprint Grid Lines */
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        /* Major Industrial Structural Engineering Grid Lines (every 120px) */
+        linear-gradient(to right, rgba(245, 158, 11, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(245, 158, 11, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px, 30px 30px, 30px 30px, 120px 120px, 120px 120px;
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
     color: var(--text-primary);
     font-family: var(--font-body);
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
+    position: relative;
 }
 
 /* --- UTILITIES & LAYOUT --- */
@@ -322,12 +341,115 @@ nav ul a:hover::after, nav ul a.active::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, 
-        rgba(11, 15, 25, 0.7) 0%, 
-        rgba(11, 15, 25, 0.85) 50%, 
-        var(--bg-primary) 100%
-    );
-    z-index: 1;
+    background: 
+        radial-gradient(ellipse at 50% 40%, rgba(9, 13, 22, 0.42) 0%, rgba(9, 13, 22, 0.76) 65%, var(--bg-primary) 100%),
+        linear-gradient(180deg, rgba(9, 13, 22, 0.3) 0%, rgba(9, 13, 22, 0.8) 75%, var(--bg-primary) 100%);
+    z-index: 2;
+}
+
+/* Hero Ambient Industrial Sparks Canvas */
+.hero-sparks-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* CAD Crosshairs & Dimension Reticles */
+.cad-crosshair {
+    position: absolute;
+    color: rgba(245, 158, 11, 0.45);
+    font-family: monospace, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    z-index: 5;
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+}
+.ch-top-left { top: 95px; left: 32px; }
+.ch-top-right { top: 95px; right: 32px; }
+.ch-bottom-left { bottom: 35px; left: 32px; }
+.ch-bottom-right { bottom: 35px; right: 32px; }
+
+/* Hero Industrial Telemetry HUD */
+.hero-hud {
+    position: absolute;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--font-heading);
+    pointer-events: none;
+    background: rgba(9, 13, 22, 0.65);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 6px;
+    padding: 8px 14px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.hero-hud-top-left {
+    top: 96px;
+    left: 56px;
+}
+
+.hero-hud-top-right {
+    top: 96px;
+    right: 56px;
+    text-align: right;
+}
+
+.hud-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hud-coords, .hud-spec {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.08em;
+    font-family: monospace;
+}
+
+.hud-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #34d399;
+    letter-spacing: 0.1em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.hud-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+    animation: hud-pulse-anim 1.8s infinite ease-in-out;
+}
+
+@keyframes hud-pulse-anim {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+}
+
+@media (max-width: 900px) {
+    .hero-hud, .cad-crosshair {
+        display: none !important;
+    }
 }
 
 .hero-content {
@@ -459,10 +581,70 @@ nav ul a:hover::after, nav ul a.active::after {
     animation: scroll-anim 1.5s infinite;
 }
 
-/* --- ABOUT SECTION --- */
+/* --- INDUSTRIAL & MANUFACTURING BACKGROUND ARCHITECTURE --- */
+
+/* Industrial Section Hazard Separator */
+.industrial-hazard-bar {
+    width: 100%;
+    height: 5px;
+    background: repeating-linear-gradient(
+        -45deg,
+        var(--accent-gold) 0,
+        var(--accent-gold) 12px,
+        #111827 12px,
+        #111827 24px
+    );
+    opacity: 0.85;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+/* Industrial Blueprint Watermark (About Section) */
 .about {
     position: relative;
     z-index: 10;
+    overflow: hidden;
+}
+
+.industrial-blueprint-watermark {
+    position: absolute;
+    top: 50%;
+    right: -2%;
+    transform: translateY(-50%);
+    width: 680px;
+    height: 85%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' fill='none' stroke='rgba(245,158,11,0.07)' stroke-width='1.2'%3E%3Crect x='150' y='60' width='140' height='420' rx='70' stroke-dasharray='4 4'/%3E%3Crect x='170' y='100' width='100' height='340' rx='50'/%3E%3Cline x1='150' y1='160' x2='290' y2='160'/%3E%3Cline x1='150' y1='240' x2='290' y2='240'/%3E%3Cline x1='150' y1='320' x2='290' y2='320'/%3E%3Cline x1='150' y1='400' x2='290' y2='400'/%3E%3Cline x1='220' y1='30' x2='220' y2='510' stroke-dasharray='8 4' stroke='rgba(245,158,11,0.1)'/%3E%3Ccircle cx='220' cy='180' r='16'/%3E%3Ccircle cx='220' cy='260' r='16'/%3E%3Ccircle cx='220' cy='340' r='16'/%3E%3Cpath d='M290 140 H370 V210 H430'/%3E%3Cpath d='M150 370 H70 V440 H30'/%3E%3Ccircle cx='370' cy='210' r='6' fill='rgba(245,158,11,0.06)'/%3E%3Ccircle cx='70' cy='440' r='6' fill='rgba(245,158,11,0.06)'/%3E%3Cline x1='120' y1='60' x2='120' y2='480' stroke='rgba(255,255,255,0.04)'/%3E%3Cline x1='110' y1='60' x2='130' y2='60' stroke='rgba(255,255,255,0.04)'/%3E%3Cline x1='110' y1='480' x2='130' y2='480' stroke='rgba(255,255,255,0.04)'/%3E%3Ctext x='65' y='275' fill='rgba(245,158,11,0.1)' font-size='12' font-family='monospace' transform='rotate(-90 65 275)'%3E%E2%86%95 5200mm PRESSURE VESSEL%3C/text%3E%3Ctext x='160' y='525' fill='rgba(245,158,11,0.1)' font-size='11' font-family='monospace'%3ESPEC: SS-316L / ASME SEC VIII DIV 1%3C/text%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: contain;
+    pointer-events: none;
+    opacity: 0.9;
+    z-index: 1;
+}
+
+/* Products Section Industrial Workshop Backdrop */
+.products {
+    position: relative;
+    overflow: hidden;
+}
+
+.products-industrial-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(ellipse at center, rgba(9, 13, 22, 0.72) 0%, rgba(9, 13, 22, 0.94) 85%, var(--bg-primary) 100%),
+        url('assets/images/industrial_fabrication_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 0.3;
+    z-index: 1;
+    filter: contrast(120%) brightness(85%);
+    pointer-events: none;
 }
 
 .about-grid {
@@ -470,6 +652,8 @@ nav ul a:hover::after, nav ul a.active::after {
     grid-template-columns: 1.1fr 0.9fr;
     gap: 64px;
     align-items: center;
+    position: relative;
+    z-index: 2;
 }
 
 .about-content h3 {
@@ -677,7 +861,9 @@ nav ul a:hover::after, nav ul a.active::after {
 
 /* --- PROCESS SECTION (INTERACTIVE FLOW) --- */
 .process {
-    background-color: var(--bg-secondary);
+    background-color: rgba(15, 22, 36, 0.85);
+    position: relative;
+    overflow: hidden;
 }
 
 .process-interactive-wrapper {
@@ -1074,7 +1260,9 @@ nav ul a:hover::after, nav ul a.active::after {
 
 /* --- CLIENTS SECTION --- */
 .clients {
-    background-color: var(--bg-secondary);
+    background-color: rgba(15, 22, 36, 0.85);
+    position: relative;
+    overflow: hidden;
 }
 
 .clients-table-controls {
@@ -1315,7 +1503,9 @@ nav ul a:hover::after, nav ul a.active::after {
 
 /* --- CONTACT SECTION --- */
 .contact {
-    background-color: var(--bg-secondary);
+    background-color: rgba(15, 22, 36, 0.85);
+    position: relative;
+    overflow: hidden;
 }
 
 .contact-grid {

@@ -429,4 +429,98 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fallback for older browsers
         revealElements.forEach(el => el.classList.add('active'));
     }
+
+    // ----------------------------------------------------
+    // INDUSTRIAL ATMOSPHERIC SPARKS & EMBERS CANVAS (HERO)
+    // ----------------------------------------------------
+    const sparksCanvas = document.getElementById('hero-sparks-canvas');
+    if (sparksCanvas) {
+        const ctx = sparksCanvas.getContext('2d');
+        let width = (sparksCanvas.width = window.innerWidth);
+        let height = (sparksCanvas.height = window.innerHeight);
+
+        window.addEventListener('resize', () => {
+            width = sparksCanvas.width = window.innerWidth;
+            height = sparksCanvas.height = window.innerHeight;
+        });
+
+        const sparkColors = [
+            'rgba(245, 158, 11, ',   // warm amber
+            'rgba(251, 191, 36, ',   // bright gold
+            'rgba(249, 115, 22, ',   // molten orange
+            'rgba(255, 255, 255, '   // welding white
+        ];
+
+        class Spark {
+            constructor() {
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                this.x = Math.random() * width;
+                this.y = initial ? Math.random() * height : height + 10;
+                this.size = Math.random() * 2.2 + 0.6;
+                this.speedY = Math.random() * 1.2 + 0.4;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.alpha = Math.random() * 0.7 + 0.2;
+                this.decay = Math.random() * 0.004 + 0.002;
+                this.color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+                this.flicker = Math.random() * 0.2;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX + Math.sin(this.y * 0.02) * 0.4;
+                this.alpha -= this.decay;
+
+                if (this.alpha <= 0 || this.y < -10) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                const currentAlpha = Math.max(0, this.alpha + (Math.random() - 0.5) * this.flicker);
+                ctx.fillStyle = `${this.color}${currentAlpha})`;
+                ctx.shadowBlur = this.size * 4;
+                ctx.shadowColor = '#f59e0b';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const sparkCount = Math.min(45, Math.floor(window.innerWidth / 35));
+        const sparks = Array.from({ length: sparkCount }, () => new Spark());
+
+        let animationFrameId;
+        let isHeroVisible = true;
+
+        const heroElement = document.getElementById('hero');
+        if (heroElement && 'IntersectionObserver' in window) {
+            const heroObserver = new IntersectionObserver(([entry]) => {
+                isHeroVisible = entry.isIntersecting;
+                if (isHeroVisible && !animationFrameId) {
+                    loop();
+                }
+            }, { threshold: 0.05 });
+            heroObserver.observe(heroElement);
+        }
+
+        function loop() {
+            if (!isHeroVisible) {
+                animationFrameId = null;
+                return;
+            }
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < sparks.length; i++) {
+                sparks[i].update();
+                sparks[i].draw();
+            }
+            animationFrameId = requestAnimationFrame(loop);
+        }
+
+        loop();
+    }
 });
